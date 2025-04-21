@@ -16,13 +16,14 @@ def hulthen_array(width = int(max_radius/h), orbital = 1):
         A[i, i] += -orbital*(orbital + 1)/((i+1) * h)**2 + hulthen_discrete(i+1)
     return A
 
-arr = hulthen_array()
 
+arr = hulthen_array()
 energy, wavefunction = eig(arr)
-for level in range(5):
-    data = (wavefunction[level]**2)[1::]
-    for i in range(len(data)):
-        data[i] /= (i+1)
-    plt.plot(data)
-    plt.title('Squared wavefunction for state n = ' + str(level+1))
-    plt.show()
+
+# Plot the ground state radial wave-function
+data = (wavefunction[0]**2)[1::]
+for i in range(len(data)):
+    data[i] /= (i+1)
+plt.plot(data)
+plt.title('Squared wavefunction for ground state')
+plt.show()
