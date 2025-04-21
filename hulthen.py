@@ -18,13 +18,14 @@ def hulthen_array(width = N_nodes, orbital = 1, delta = 0.025):
     return A
 
 
-arr = hulthen_array(width = 25, orbital = 1, delta = 0.025)
+arr = hulthen_array(width = 60, orbital = 2, delta = 0.025)
 energy, wavefunction = eig(arr)
-print(energy[1:6]) # energies for 2p, 3p, 4p, 5p, and 6p
+data = (wavefunction[3]**2)[3::]
+plt.plot(data)
 
-# data = (wavefunction[3]) # 3f electron
-# for i in range(len(data)):
-#     data[i] /= ((i+1) * h)
-# data = (data**2)[1::]
-# plt.plot(data)
-# plt.show()
+arr2 = hulthen_array(width = 60, orbital = 2, delta = 0.15)
+energy2, wavefunction2 = eig(arr2)
+data2 = (wavefunction[3]**2)[3::]
+plt.plot(data2)
+
+plt.show()
