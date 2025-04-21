@@ -2,15 +2,15 @@ import numpy as np
 from numpy.linalg import eig
 import matplotlib.pyplot as plt
 
-h = 0.5
-max_radius = 100
-
+N_nodes = 15
+max_radius = 40
+h = int(max_radius / N_nodes)
 
 
 def hulthen_discrete(r, delta):
     return delta * np.exp(-delta * r * h)/(1 - np.exp(-delta * r * h))
 
-def hulthen_array(width = int(max_radius/h), orbital = 1, delta = 0.025):
+def hulthen_array(width = N_nodes, orbital = 1, delta = 0.025):
     A = np.diag(np.full(width, [1/(h**2)])) + np.diag(np.full(width-1, [-1/(2*(h**2))]), 1)\
     + np.diag(np.full(width-1, [-1/(2*(h**2))]), -1)
     for i in range(width):
@@ -22,9 +22,9 @@ arr = hulthen_array()
 energy, wavefunction = eig(arr)
 
 # Plot the first excited state radial wave-function
-data = (wavefunction[1]**2)[1::]
+data = (wavefunction[1])[1::]
 for i in range(len(data)):
-    data[i] /= (i+1)
+    data[i] /= ((i+1) * h)
+data = data**2
 plt.plot(data)
-plt.title('Squared wavefunction for a 2p electron')
 plt.show()
