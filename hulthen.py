@@ -18,7 +18,7 @@ def hulthen_array(width = N_nodes, orbital = 1, delta = 0.025):
     return A
 
 
-arr = hulthen_array(width = 25, orbital = 1, delta = 0.025)
+arr = hulthen_array(width = 25, orbital = 3, delta = 0.025)
 energy, wavefunction = eig(arr)
 
 data = (wavefunction[3])
