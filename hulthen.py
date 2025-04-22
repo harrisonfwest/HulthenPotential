@@ -20,16 +20,16 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
     A = np.diag(np.full(width-1, [1/(h**2)])) + np.diag(np.full(width-2, [-1/(2*(h**2))]), 1)\
     + np.diag(np.full(width-2, [-1/(2*(h**2))]), -1)
     for i in range(width-1):
-        A[i, i] += -orbital*(orbital + 1)/((i+2)**2 * h**2) + hulthen_discrete(i+1, delta, orbital)
+        A[i, i] += -orbital*(orbital + 1)/((i+2)**2 * h**2) + hulthen_discrete(i+2, delta, orbital)
     return A
 
 # plt.plot(np.linspace(.25, 200, 10000), hulthen_discrete(np.linspace(.25, 200, 10000), 0.025, 1))
 # plt.xscale('log')
 # plt.show()
 
-arr = hulthen_array(width = 250, size = 40, orbital = 1, delta = 0.025)
+arr = hulthen_array(width = 20, size = 40, orbital = 1, delta = 0.025)
 e, w = eig(arr)
 sorted_e, sorted_w = zip(*sorted(zip(e, w)))
-print(sorted_e)
-# plt.plot(sorted_w[1]**2)
-# plt.show()
+func = np.append(0, np.append(sorted_w[2], 0))
+plt.plot(func**2)
+plt.show()
