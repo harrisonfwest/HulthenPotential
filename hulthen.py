@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 
 N_nodes = 50
 max_radius = 150
-h = max_radius / N_nodes
 
 def hulthen_discrete(r, delta, orbital, currH):
     t1 = -(delta * np.exp(-delta * r * currH))/(1- np.exp(-delta * r * currH))
@@ -13,7 +12,7 @@ def hulthen_discrete(r, delta, orbital, currH):
     t4 = np.exp(-delta * r * currH)
     return t1 + (t2*(t3**2)*t4)
 
-def hulthen_array(width = N_nodes, size = 1, orbital = 1, delta = 0.025):
+def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
     h = size / (width-2)
     A = np.diag(np.full(width-2, [1/(h**2)])) + np.diag(np.full(width-3, [-1/(2*(h**2))]), 1)\
     + np.diag(np.full(width-3, [-1/(2*(h**2))]), -1)
@@ -21,8 +20,8 @@ def hulthen_array(width = N_nodes, size = 1, orbital = 1, delta = 0.025):
         A[i, i] += -orbital*(orbital + 1)/((i+2)**2 * h**2) + hulthen_discrete(i+2, delta, orbital, h)
     return A
 
-plt.plot(np.logspace(.25, 200, 1000), \
-         hulthen_discrete(np.logspace(.25, 200, 1000), 0.025, 1, currH = (200-.25)/1000))
+plt.plot(np.linspace(1, 200, 10000), \
+         hulthen_discrete(np.linspace(1, 200, 10000), 0.025, 1, currH = 1))
 plt.xscale('log')
 plt.show()
 
