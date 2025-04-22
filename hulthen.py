@@ -1,6 +1,7 @@
 import numpy as np
 from numpy.linalg import eig
 import matplotlib.pyplot as plt
+import pandas as pd
 
 N_nodes = 50
 max_radius = 150
@@ -16,20 +17,19 @@ def hulthen_discrete(r, delta, orbital):
 
 def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
     h = size / width
-    A = np.diag(np.full(width, [1/(h**2)])) + np.diag(np.full(width-1, [-1/(2*(h**2))]), 1)\
-    + np.diag(np.full(width-1, [-1/(2*(h**2))]), -1)
-    for i in range(width):
-        A[i, i] += -orbital*(orbital + 1)/((i+1)**2 * h**2) + hulthen_discrete(i+1, delta, orbital)
-    A = np.delete(A, 0, 0)
-    A = np.delete(A, -1, 0)
-    A = np.delete(A, 0, 1)
-    A = np.delete(A, -1, 1)
+    A = np.diag(np.full(width-1, [1/(h**2)])) + np.diag(np.full(width-2, [-1/(2*(h**2))]), 1)\
+    + np.diag(np.full(width-2, [-1/(2*(h**2))]), -1)
+    for i in range(width-1):
+        A[i, i] += -orbital*(orbital + 1)/((i+2)**2 * h**2) + hulthen_discrete(i+1, delta, orbital)
     return A
 
-# plt.plot(np.arange(1, N_nodes), hulthen_discrete(np.arange(1, N_nodes), 0.025, 1))
+# plt.plot(np.linspace(.25, 200, 10000), hulthen_discrete(np.linspace(.25, 200, 10000), 0.025, 1))
+# plt.xscale('log')
 # plt.show()
 
-# arr = hulthen_array(width = 75, size = 40, orbital = 1, delta = 0.025)
-# energy, wavefunction = eig(arr)
-# energy.sort()
-# print(energy)
+arr = hulthen_array(width = 250, size = 40, orbital = 1, delta = 0.025)
+e, w = eig(arr)
+sorted_e, sorted_w = zip(*sorted(zip(e, w)))
+print(sorted_e)
+# plt.plot(sorted_w[1]**2)
+# plt.show()
