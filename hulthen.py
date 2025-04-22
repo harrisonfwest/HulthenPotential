@@ -1,7 +1,6 @@
 import numpy as np
 from numpy.linalg import eig
 import matplotlib.pyplot as plt
-import pandas as pd
 
 N_nodes = 50
 max_radius = 150
