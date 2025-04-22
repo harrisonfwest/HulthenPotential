@@ -25,11 +25,11 @@ plt.plot(np.linspace(1, 200, 10000), \
 plt.xscale('log')
 plt.show()
 
-arr = hulthen_array(width = 40, size = 40, orbital = 1, delta = 0.025)
+arr = hulthen_array(width = 60, size = 50, orbital = 1, delta = 0.025)
 e, w = eig(arr)
 for wave in w:
     wave[0] = 0
 sorted_e, sorted_w = zip(*sorted(zip(e, w)))
-func = np.append(0, np.append(sorted_w[1], 0))
+func = np.append(0, np.append(sorted_w[2], 0))
 plt.plot(func**2)
 plt.show()
