@@ -15,15 +15,15 @@ def hulthen_discrete(r, delta, orbital, currH):
     return t1 + (t2*(t3**2)*t4)
 
 def hulthen_array(width = N_nodes, size = 1, orbital = 1, delta = 0.025):
-    h = size / width
-    A = np.diag(np.full(width-1, [1/(h**2)])) + np.diag(np.full(width-2, [-1/(2*(h**2))]), 1)\
-    + np.diag(np.full(width-2, [-1/(2*(h**2))]), -1)
-    for i in range(width-1):
+    h = size / (width-2)
+    A = np.diag(np.full(width-2, [1/(h**2)])) + np.diag(np.full(width-3, [-1/(2*(h**2))]), 1)\
+    + np.diag(np.full(width-3, [-1/(2*(h**2))]), -1)
+    for i in range(width-2):
         A[i, i] += -orbital*(orbital + 1)/((i+2)**2 * h**2) + hulthen_discrete(i+2, delta, orbital, h)
     return A
 
-plt.plot(np.linspace(.25, 200, 10000), \
-         hulthen_discrete(np.linspace(.25, 200, 10000), 0.025, 1, currH = (200-.25)/10000))
+plt.plot(np.logspace(.25, 200, 1000), \
+         hulthen_discrete(np.logspace(.25, 200, 1000), 0.025, 1, currH = (200-.25)/1000))
 plt.xscale('log')
 plt.show()
 
