@@ -31,43 +31,13 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 #          hulthen_discrete(np.linspace(1, 200, 10000), 0.025, 1, currH = 1))
 # plt.xscale('log')
 # plt.show()
-'''
-# Eigenenergies for l = 1 (p shell) electrons
-arr = hulthen_array(width = 1000, size = 40, orbital = 1, delta = 0.025)
-e, w = eig(arr)
-# ordering = e.argsort() # order of indices to sort the values
-# w = w[e.argsort()]
-# e.sort()
 
-# sorted_e, sorted_w = zip(*sorted(zip(e, w)))
-# print('Eigenenergies of p orbital: ' + str(e))
-for i in range(len(w)):
-    if e[i] < 0:
-        plt.plot(w[i]**2)
-        plt.ylim(0, .12)
-        plt.title('E = ' + str(e[i]))
-        plt.ylabel('$u^2$(r)')
-        plt.xlabel('node index r')
-        plt.show()
-'''
-arr = hulthen_array(width = 200, size = 100, orbital = 1, delta = 0.025)
+# Eigenenergies for l = 1 (p shell) electrons
+arr = hulthen_array(width = 1000, size = 100, orbital = 1, delta = 0.025)
 e, w = eig(arr)
-print('Eigenvalues',e)
-print('Eigenvector',w)
-print('Eigenvalue-0',e[54])
-print('Eigenvector-0',w[:54])
-#evec0=w[:54].T
-##print(len(evec0))
-#print('evec0',evec0**2)
-evec0=w[:,54]
-#print(len(evec0))
-print('evec0',evec0)
-plt.plot(evec0**2)
-plt.show()
-sorted_e, sorted_w = zip(*sorted(zip(e, w)))
-print('Eigenenergies of p orbital for n = 2, 3, 4...:' + str(sorted_e))
-##p
-## returns same energies as Table 1 (Varshni 1990) with original pure Hulthen potential
-## but not with the additional terms from Eq. 5 (same paper)
-#plt.plot(np.append(0, np.append(sorted_w[1], 0))**2)
-#plt.show()
+
+for i in range(len(e)):
+    if e[i] < 0:
+        plt.plot(w[:,i]**2)
+        plt.title('E = ' + str(e[i]))
+        plt.show()
