@@ -32,8 +32,7 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 # plt.xscale('log')
 # plt.show()
 
-
-# Finding u(r) for 3p electron with screening parameter 0.025
+# Eigenenergies for l = 1 (p shell) electrons
 arr = hulthen_array(width = 1000, size = 100, orbital = 1, delta = 0.025)
 e, w = eig(arr)
 sorted_e, sorted_w = zip(*sorted(zip(e, w)))
