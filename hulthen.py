@@ -7,9 +7,9 @@ max_radius = 150
 
 def hulthen_discrete(r, delta, orbital, currH):
     t1 = -(delta * np.exp(-delta * r * currH))/(1- np.exp(-delta * r * currH))
-    t2 = (orbital * (orbital + 1))/2
-    t3 = delta / (1 - np.exp(-delta * r * currH))
-    t4 = np.exp(-delta * r * currH)
+    # t2 = (orbital * (orbital + 1))/2
+    # t3 = delta / (1 - np.exp(-delta * r * currH))
+    # t4 = np.exp(-delta * r * currH)
     return t1 #+ (t2*(t3**2)*t4)
 
 def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
@@ -33,9 +33,11 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 # plt.show()
 
 # Eigenenergies for l = 1 (p shell) electrons
-arr = hulthen_array(width = 2000, size = 100, orbital = 1, delta = 0.025)
+arr = hulthen_array(width = 60, size = 100, orbital = 1, delta = 0.025)
 e, w = eig(arr)
 sorted_e, sorted_w = zip(*sorted(zip(e, w)))
 print('Eigenenergies of p orbital for n = 2, 3, 4...:' + str(sorted_e))
 # returns same energies as Table 1 (Varshni 1990) with original pure Hulthen potential
 # but not with the additional terms from Eq. 5 (same paper)
+plt.plot(np.append(0, np.append(sorted_w[1], 0))**2)
+plt.show()
