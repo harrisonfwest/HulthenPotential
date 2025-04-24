@@ -33,17 +33,19 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 # plt.show()
 
 # Eigenenergies for l = 1 (p shell) electrons
-arr = hulthen_array(width = 1000, size = 80, orbital = 1, delta = 0.025)
+arr = hulthen_array(width = 1000, size = 40, orbital = 1, delta = 0.025)
 e, w = eig(arr)
-w = w[e.argsort()]
-e.sort()
+# ordering = e.argsort() # order of indices to sort the values
+# w = w[e.argsort()]
+# e.sort()
 
 # sorted_e, sorted_w = zip(*sorted(zip(e, w)))
-print('Eigenenergies of p orbital for n = 2, 3, 4...:' + str(e))
+print('Eigenenergies of p orbital: ' + str(e))
 # returns same energies as Table 1 (Varshni 1990) with original pure Hulthen potential
 # but not with the additional terms from Eq. 5 (same paper)
-x_range = np.arange(0, 80, 80/1000)
-plt.plot(x_range, np.append(0, np.append(w[1], 0))**2)
-plt.xlabel('r')
-plt.ylabel('u(r)')
+x_range = np.arange(0, 40, 40/1000)
 plt.show()
+for i in range(len(e)):
+    if e[i] < 0 :
+        plt.plot(x_range, np.append(0, np.append(w[i], 0))**2)
+        plt.show()
