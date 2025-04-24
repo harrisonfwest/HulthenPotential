@@ -27,10 +27,10 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
     return A
 
 ### Plot of Hulthen Potential: ###
-plt.plot(np.linspace(1, 200, 10000), \
-         hulthen_discrete(np.linspace(1, 200, 10000), 0.025, 1, currH = 1))
-plt.xscale('log')
-plt.show()
+# plt.plot(np.linspace(1, 200, 10000), \
+#          hulthen_discrete(np.linspace(1, 200, 10000), 0.025, 1, currH = 1))
+# plt.xscale('log')
+# plt.show()
 
 # Eigenenergies for l = 1 (p shell) electrons
 arr = hulthen_array(width = 2000, size = 100, orbital = 1, delta = 0.025)
