@@ -39,5 +39,5 @@ e, w = eig(arr)
 for i in range(len(e)):
     if e[i] < 0:
         plt.plot(w[:,i]**2)
-        plt.title('E = ' + str(e[i]))
+        plt.title('E = ' + str(e[i]) + ' (l = 1)')
         plt.show()
