@@ -20,7 +20,7 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 
     diags = np.zeros(true_size)
     for i in range(len(diags)):
-        true_index = i + 2
+        true_index = i + 1
         diags[i] = (1/(h**2)) + (orbital * (orbital + 1))/(2 * (true_index * h)**2) + hulthen_discrete(true_index, delta, orbital, h)
     diagA = np.diag(diags)
     A = offDiagA + diagA
@@ -35,13 +35,15 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 # Eigenenergies for l = 1 (p shell) electrons
 arr = hulthen_array(width = 1000, size = 40, orbital = 1, delta = 0.025)
 e, w = eig(arr)
-ordering = e.argsort() # order of indices to sort the values
-w = w[e.argsort()]
-e.sort()
+# ordering = e.argsort() # order of indices to sort the values
+# w = w[e.argsort()]
+# e.sort()
 
 # sorted_e, sorted_w = zip(*sorted(zip(e, w)))
-print('Eigenenergies of p orbital: ' + str(e))
+# print('Eigenenergies of p orbital: ' + str(e))
 for i in range(len(w)):
-    plt.plot(w[i]**2)
-    plt.ylim(0, .12)
-    plt.show()
+    if e[i] < 0:
+        plt.plot(w[i]**2)
+        plt.ylim(0, .12)
+        plt.title('E = ' + str(e[i]))
+        plt.show()
