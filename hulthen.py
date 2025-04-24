@@ -34,10 +34,8 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 
 arr = hulthen_array(width = 1000, size = 100, orbital = 1, delta = 0.025)
 e, w = eig(arr)
-print(len(w[:,0]))
-
-# for i in range(len(e)):
-#     if e[i] < 0:
-#         plt.plot(w[:,i]**2)
-#         plt.title('E = ' + str(e[i]) + ' (l = 1)')
-#         plt.show()
+ordered_e = np.argsort(e)
+for i in ordered_e[:6]:
+    plt.plot(w[:,i]**2)
+    plt.title('E = ' + str(e[i]) + ' (l = 1)')
+    plt.show()
