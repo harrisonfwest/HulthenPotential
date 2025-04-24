@@ -13,7 +13,7 @@ def hulthen_discrete(r, delta, orbital, currH):
     return t1 #+ (t2*(t3**2)*t4) # omitting extra terms, using pure Hulthen potential
 
 def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
-    true_size = width - 2
+    true_size = width - 1
     h = size / width
     offDiags = np.full(shape = true_size - 1, fill_value = -1/(2 * h**2)) # off-diagonal entries
     offDiagA = np.diag(offDiags, 1) + np.diag(offDiags, -1)
