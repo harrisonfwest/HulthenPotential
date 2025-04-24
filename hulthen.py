@@ -63,11 +63,10 @@ def simpson_integral(wavefunction, h):
 wavefunction = w[:,866]
 plt.plot(wavefunction)
 plt.show()
-norm = 1/np.sqrt(simpson_integral(wavefunction**2, 100/999))
+norm = simpson_integral(wavefunction**2, 100/999)
 # print(norm)
-wavefunction2 = wavefunction**2
-for i in range(len(wavefunction2)):
-    wavefunction2[i] *= norm
-plt.plot(wavefunction2)
+wave2 = wavefunction**2
+for i in range(len(wave2)):
+    wave2[i] /= norm
+plt.plot(wave2)
 plt.show()
-print(simpson_integral(wavefunction2, 100/999))
