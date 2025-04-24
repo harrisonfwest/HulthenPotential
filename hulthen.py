@@ -24,11 +24,11 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
         A[i, i] += -(orbital*(orbital + 1))/(true_r * h)**2 + hulthen_discrete(true_r, delta, orbital, h)
     return A
 
-### Plot of Hulthen Potential:
-# plt.plot(np.linspace(1, 200, 10000), \
-#          hulthen_discrete(np.linspace(1, 200, 10000), 0.025, 1, currH = 1))
-# plt.xscale('log')
-# plt.show()
+### Plot of Hulthen Potential: ###
+plt.plot(np.linspace(1, 200, 10000), \
+         hulthen_discrete(np.linspace(1, 200, 10000), 0.025, 1, currH = 1))
+plt.xscale('log')
+plt.show()
 
 # Finding u(r) for 3p electron with screening parameter 0.025
 arr = hulthen_array(width = 30, size = 40, orbital = 1, delta = 0.025)
