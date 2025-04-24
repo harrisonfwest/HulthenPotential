@@ -7,9 +7,9 @@ max_radius = 150
 
 def hulthen_discrete(r, delta, orbital, currH):
     t1 = -(delta * np.exp(-delta * r * currH))/(1- np.exp(-delta * r * currH))
-    # t2 = (orbital * (orbital + 1))/2
-    # t3 = delta / (1 - np.exp(-delta * r * currH))
-    # t4 = np.exp(-delta * r * currH)
+    t2 = (orbital * (orbital + 1))/2
+    t3 = delta / (1 - np.exp(-delta * r * currH))
+    t4 = np.exp(-delta * r * currH)
     return t1 #+ (t2*(t3**2)*t4) # omitting extra terms, using pure Hulthen potential
 
 def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
