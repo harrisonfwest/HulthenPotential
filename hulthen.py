@@ -46,21 +46,26 @@ def simpson_integral(wavefunction, h):
 
     t1 = (1/3) * h
 
-    t2 = wavefunction[0] + wavefunction[-1]
+    t2 = wavefunction[0]**2 + wavefunction[-1]**2
 
     t3 = 0
     for i in range(1, half_length):
-        t3 += wavefunction[2*i - 1] + 2
+        t3 += wavefunction[2*i - 1]**2 + 2
     t3 *= 4
 
     t4 = 0
     for i in range(1, half_length - 1):
-        t4 += wavefunction[2 * i]
+        t4 += wavefunction[2 * i]**2
     t4 *= 2
 
     return t1 * (t2 + t3 + t4)
 
-func = w[:,866]**2
+func = w[:,866]
 plt.plot(func)
 plt.show()
-print(simpson_integral(func, 100/999))
+norm = 1/np.sqrt(simpson_integral(func, 100/999))
+# print(norm)
+for i in range(len(func)):
+    func[i] *= norm
+plt.plot(func**2)
+plt.show()
