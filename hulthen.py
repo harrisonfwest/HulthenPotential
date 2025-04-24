@@ -13,10 +13,11 @@ def hulthen_discrete(r, delta, orbital, currH):
     return t1 + (t2*(t3**2)*t4)
 
 def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
-    true_size = width - 2
+    true_size = width - 2 # we omit the first/last rows and left/rightmost columns,
+                          # since we define u(r) = 0 at the first and last nodes
     h = size / width
-    A = np.diag(np.full(true_size, [1/(h**2)])) \
-      + np.diag(np.full(true_size-1, [-1/(2*(h**2))]), 1) \
+    A = np.diag(np.full(true_size, [1/(h**2)]))                 \
+      + np.diag(np.full(true_size-1, [-1/(2*(h**2))]), 1)    \
       + np.diag(np.full(true_size-1, [-1/(2*(h**2))]), -1)
     for i in range(true_size):
         true_r = i + 2
@@ -30,7 +31,7 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 # plt.show()
 
 # Finding u(r) for 3p electron with screening parameter 0.025
-arr = hulthen_array(width = 80, size = 80, orbital = 1, delta = 0.025)
+arr = hulthen_array(width = 30, size = 40, orbital = 1, delta = 0.025)
 e, w = eig(arr)
 
 # for wave in w:
@@ -41,5 +42,5 @@ e, w = eig(arr)
 sorted_e, sorted_w = zip(*sorted(zip(e, w)))
 # plt.plot(sorted_w[1]**2)
 func = np.append(0, np.append(sorted_w[1], 0))
-plt.plot(func**2)
+plt.plot(np.arange(0, 40, 40/30), func**2) # arange args are 0, size, size/width
 plt.show()
