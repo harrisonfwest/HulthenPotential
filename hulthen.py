@@ -41,6 +41,7 @@ e.sort()
 
 # sorted_e, sorted_w = zip(*sorted(zip(e, w)))
 print('Eigenenergies of p orbital: ' + str(e))
-for i in range(4):
+for i in range(len(w)):
     plt.plot(w[i]**2)
+    plt.ylim(0, .12)
     plt.show()
