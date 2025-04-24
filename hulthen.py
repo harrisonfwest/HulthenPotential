@@ -33,7 +33,7 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 # plt.show()
 
 # Eigenenergies for l = 1 (p shell) electrons
-arr = hulthen_array(width = 80, size = 40, orbital = 1, delta = 0.025)
+arr = hulthen_array(width = 1000, size = 40, orbital = 1, delta = 0.025)
 e, w = eig(arr)
 ordering = e.argsort() # order of indices to sort the values
 w = w[e.argsort()]
@@ -41,5 +41,6 @@ e.sort()
 
 # sorted_e, sorted_w = zip(*sorted(zip(e, w)))
 print('Eigenenergies of p orbital: ' + str(e))
-plt.plot(w[1]**2)
-plt.show()
+for i in range(4):
+    plt.plot(w[i]**2)
+    plt.show()
