@@ -42,6 +42,6 @@ e, w = eig(arr)
 
 sorted_e, sorted_w = zip(*sorted(zip(e, w)))
 # plt.plot(sorted_w[1]**2)
-func = np.append(0, np.append(sorted_w[3], 0))
+func = np.append(0, np.append(sorted_w[3], 0)) # define first and last nodes as 0
 plt.plot(np.arange(0, 200, 200/60), func**2) # arange args are 0, size, size/width
 plt.show()
