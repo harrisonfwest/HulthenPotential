@@ -13,15 +13,17 @@ def hulthen_discrete(r, delta, orbital, currH):
     return t1 #+ (t2*(t3**2)*t4)
 
 def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
-    true_size = width - 2 # we omit the first/last rows and left/rightmost columns,
-                          # since we define u(r) = 0 at the first and last nodes
+    true_size = width - 2
     h = size / width
-    A = np.diag(np.full(true_size, [1/(h**2)]))                 \
-      + np.diag(np.full(true_size-1, [-1/(2*(h**2))]), 1)    \
-      + np.diag(np.full(true_size-1, [-1/(2*(h**2))]), -1)
-    for i in range(true_size):
-        true_r = i + 2
-        A[i, i] += (orbital*(orbital + 1))/(true_r * h)**2 + hulthen_discrete(true_r, delta, orbital, h)
+    offDiags = np.full(shape = true_size - 1, fill_value = -1/(2 * h**2)) # off-diagonal entries
+    offDiagA = np.diag(offDiags, 1) + np.diag(offDiags, -1)
+
+    diags = np.zeros(true_size)
+    for i in range(len(diags)):
+        true_index = i + 2
+        diags[i] = (1/(h**2)) + (orbital * (orbital + 1))/(2 * (true_index * h)**2) + hulthen_discrete(true_index, delta, orbital, h)
+    diagA = np.diag(diags)
+    A = offDiagA + diagA
     return A
 
 ### Plot of Hulthen Potential: ###
@@ -34,18 +36,5 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
 # Finding u(r) for 3p electron with screening parameter 0.025
 arr = hulthen_array(width = 1000, size = 40, orbital = 1, delta = 0.025)
 e, w = eig(arr)
-
-# for wave in w:
-#     plt.plot(wave**2, alpha = 1)
-#     plt.show()
-#     wave[0] = 0
-
 sorted_e, sorted_w = zip(*sorted(zip(e, w)))
-
-print(sorted_e)
-
-# plt.plot(sorted_w[1]**2)
-
-# func = np.append(0, np.append(sorted_w[3], 0)) # define first and last nodes as 0
-# plt.plot(np.arange(0, 200, 200/60), func**2) # arange args are 0, size, size/width
-# plt.show()
+print('Eigenenergies of p orbital for n = 2, 3, 4...:' + str(sorted_e))
