@@ -4,4 +4,4 @@ Computational model to analytically compute the energies and approximate wavefun
 
 Created for the Physics 214 (Introduction to Quantum Mechanics) Spring 2025 final project at Haverford College.
 
-Created by Harrison West with assisance from Majdouline Benlahcen.
+Created by Harrison West with assistance from Majdouline Benlahcen.
