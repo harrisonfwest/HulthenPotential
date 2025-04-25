@@ -49,7 +49,7 @@ def normalize(wavefunction, h):
 
 def first_derivative(wavefunction, h):
     res = np.zeros_like(wavefunction)
-    for i in range(1, len(wavefunction)):
+    for i in range(1, len(wavefunction)-1):
         res[i] = (wavefunction[i+1] - wavefunction[i-1])/(2 * h)
     return res
 
@@ -63,12 +63,16 @@ r_range = np.linspace(0, 100, 999)
 expectation_r_square = trapezoid_integral(wave**2 * r_range**2, h_ex)
 expectation_r = trapezoid_integral(wave**2 * r_range, h_ex)
 delta_r = np.sqrt(expectation_r_square - expectation_r**2)
-print(delta_r)
 hbar = 1.0545e-34
 wave_dr = first_derivative(wave, h_ex)
 wave_ddr = first_derivative(wave_dr, h_ex)
-expectation_p_square = trapezoid_integral(wave_ddr * -(hbar**2), h_ex)
-expectation_p = trapezoid_integral(wave_dr * hbar, h_ex)
+expectation_p_square = trapezoid_integral(wave_ddr**2 * (hbar**2), h_ex)
+expectation_p = trapezoid_integral(hbar * wave_dr**2, h_ex)
+# make product of expectation_p with itself negative bc -i term in front of both
+delta_p = np.sqrt(expectation_p_square - expectation_p**2)
+print('Delta r = ' + str(delta_r))
+print('Delta p = ' + str(delta_p))
+print('Uncertainty = ' + str(delta_r * delta_p))
 
 ### Plot 3p orbital probability density approximations (normalized) for various screening parameters
 ### and their corresponding energies
