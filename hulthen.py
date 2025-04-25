@@ -95,6 +95,7 @@ plt.axhline(e4[order4[1]], color = 'C3', label = '$\delta$ = 0.100, E = %.5f' % 
 plt.axhline(e3[order3[1]], color = 'C2', label = '$\delta$ = 0.075, E = %.5f' % e3[order3][1], linestyle = 'dotted')
 plt.axhline(e2[order2[1]], color = 'C1', label = '$\delta$ = 0.050, E = %.5f' % e2[order2[1]], linestyle = '--')
 plt.axhline(e1[order1[1]], color = 'C0', label = '$\delta$ = 0.025, E = %.5f' % e1[order1[1]])
+plt.axhline(0, color = 'k')
 plt.legend()
 plt.xticks([])
 plt.ylim(-.046, 0.001)
