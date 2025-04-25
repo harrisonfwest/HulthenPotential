@@ -62,15 +62,15 @@ def uncertainties(width, size, orb, delt, allowed_level):
     h_ex = size/width
     wave = normalize(wavefunction = w[:,order[allowed_level-1]], h = h_ex)
     r_range = np.linspace(0, size, width)
-    expectation_r_square = trapezoid_integral(wave**2 * r_range**2, h_ex)
     expectation_r = trapezoid_integral(wave**2 * r_range, h_ex)
+    expectation_r_square = trapezoid_integral(wave**2 * r_range**2, h_ex)
     delta_r = np.sqrt(expectation_r_square - expectation_r**2)
 
     wave_dr = first_derivative(wave, h_ex)
     wave_ddr = first_derivative(wave_dr, h_ex)
-    expectation_p_square = trapezoid_integral(wave_ddr**2 * (hbar**2), h_ex)
-    expectation_p = trapezoid_integral(hbar * wave_dr**2, h_ex)
-    delta_p = np.sqrt(expectation_p_square + expectation_p**2)
+    expectation_p_quantSquared = - hbar**2 * (trapezoid_integral(wave * wave_dr, h_ex))**2
+    expectation_p_square = - hbar**2 * trapezoid_integral(wave * wave_ddr, h_ex)
+    delta_p = np.sqrt(expectation_p_square - expectation_p_quantSquared)
     print('Delta r = ' + str(delta_r))
     print('Delta p = ' + str(delta_p))
     print('Uncertainty = ' + str(delta_r * delta_p))
