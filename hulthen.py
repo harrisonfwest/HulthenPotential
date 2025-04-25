@@ -55,7 +55,7 @@ def first_derivative(wavefunction, h):
         res[i] = (wavefunction[i+1] - wavefunction[i-1])/(2 * h)
     return res
 
-def uncertainties(width, size, orb, delt, allowed_level):
+def uncertainties(width, size, orb, delt, allowed_level) -> None:
     arr = hulthen_array(999, 50, orbital = orb, delta = delt)
     e, w = eig(arr)
     order = np.argsort(e)
@@ -76,11 +76,38 @@ def uncertainties(width, size, orb, delt, allowed_level):
     print('Uncertainty = ' + str(delta_r * delta_p))
     return
 
-# Get ∆r∆p value for 2p, 3p, 4p, and 5p orbitals (delta = 0.025):
-uncertainties(999, 100, 1, 0.025, 1)
-uncertainties(999, 100, 1, 0.025, 2)
-uncertainties(999, 100, 1, 0.025, 3)
-uncertainties(999, 100, 1, 0.025, 4)
+node_counts = np.arange(10, 2000, 50)
+num_levels = []
+for count in node_counts:
+    curr_count_levels = 0
+    for orb in range(1, 6):
+        arr = hulthen_array(count, 100, orbital = orb, delta = 0.025)
+        e, w = eig(arr)
+        allowed = [en for en in e if en < 0]
+        curr_count_levels += len(allowed)
+    num_levels.append(curr_count_levels)
+plt.plot(node_counts, num_levels)
+plt.show()
+
+### What is the value of nodes at which values for energy converge? We will try varying node counts on
+### a 2p shell in a box 100 wide, with delta = 0.025
+# node_counts = np.arange(10, 2000, 10)
+# energies = []
+# for count in node_counts:
+#     arr = hulthen_array(count, 100, orbital = 1, delta = 0.025)
+#     e, w = eig(arr)
+#     order = np.argsort(e)
+#     lowest_energy = e[order][0]
+#     energies.append(lowest_energy)
+# plt.plot(node_counts, energies)
+# plt.show()
+
+
+### Get ∆r∆p value for 2p, 3p, 4p, and 5p orbitals (delta = 0.025):
+# uncertainties(999, 100, 1, 0.025, 1)
+# uncertainties(999, 100, 1, 0.025, 2)
+# uncertainties(999, 100, 1, 0.025, 3)
+# uncertainties(999, 100, 1, 0.025, 4)
 
 ### Plot 3p orbital probability density approximations (normalized) for various screening parameters
 ### and their corresponding energies
