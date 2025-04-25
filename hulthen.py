@@ -18,6 +18,9 @@ def hulthen_discrete(r, delta, orbital, currH):
 # plt.plot(np.linspace(1, 200, 10000), \
 #          hulthen_discrete(np.linspace(1, 200, 10000), 0.025, 1, currH = 1))
 # plt.xscale('log')
+# plt.title('Hulthén potential')
+# plt.xlabel('r')
+# plt.ylabel('V(r)')
 # plt.show()
 
 def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
@@ -76,32 +79,49 @@ def uncertainties(width, size, orb, delt, allowed_level) -> None:
     print('Uncertainty = ' + str(delta_r * delta_p))
     return
 
-delta_range = np.linspace(0.025, 0.5, 40)
-num_levels = []
-for delt in delta_range:
-    curr_delt_levels = 0
-    for orb in range(1, 6):
-        arr = hulthen_array(999, 100, orbital = orb, delta = delt)
-        e, w = eig(arr)
-        allowed = [en for en in e if en < 0]
-        curr_delt_levels += len(allowed)
-    num_levels.append(curr_delt_levels)
-plt.plot(delta_range, num_levels)
-plt.xlabel('Number of nodes used to approximate wavefunction')
-plt.ylabel('Number of allowed energy levels found')
-plt.show()
+# delta_range = np.linspace(0.025, 0.5, 40)
+# num_levels = []
+# for delt in delta_range:
+#     curr_delt_levels = 0
+#     for orb in range(1, 6):
+#         arr = hulthen_array(999, 100, orbital = orb, delta = delt)
+#         e, w = eig(arr)
+#         allowed = [en for en in e if en < 0]
+#         curr_delt_levels += len(allowed)
+#     num_levels.append(curr_delt_levels)
+# plt.plot(delta_range, num_levels)
+# plt.xlabel('Screening parameter $\delta$')
+# plt.ylabel('Number of allowed energy levels found')
+# plt.show()
 
 ### What is the value of nodes at which values for energy converge? We will try varying node counts on
 ### a 2p shell in a box 100 wide, with delta = 0.025
-# node_counts = np.arange(10, 999, 10)
-# energies = []
-# for count in node_counts:
-#     arr = hulthen_array(count, 100, orbital = 1, delta = 0.025)
+# node_range = np.arange(10, 999, 30)
+# num_levels = []
+# for node in node_range:
+#     curr_node = 0
+#     for orb in range(1, 6):
+#         arr = hulthen_array(node, 100, orbital = orb, delta = 0.1)
+#         e, w = eig(arr)
+#         allowed = [en for en in e if en < 0]
+#         curr_node += len(allowed)
+#     num_levels.append(curr_node)
+# plt.plot(node_range, num_levels)
+# plt.xlabel('Number of nodes used to approximate wavefunction')
+# plt.ylabel('Number of allowed energy levels found')
+# plt.show()
+
+### Finding the lowest allowed energy level value for increasing numbers of nodes
+# node_range = np.arange(10, 999, 1)
+# lowest_levels = []
+# for node in node_range:
+#     arr = hulthen_array(node, 100, orbital = 1, delta = 0.1)
 #     e, w = eig(arr)
-#     order = np.argsort(e)
-#     lowest_energy = e[order][0]
-#     energies.append(lowest_energy)
-# plt.plot(node_counts, energies)
+#     lowest_levels.append(e[e.argsort(0)][0])
+# plt.plot(node_range, lowest_levels)
+# plt.xlabel('Number of nodes used to approximate wavefunction')
+# plt.ylabel('Lowest allowed energy level found')
+# plt.xscale('log')
 # plt.show()
 
 
