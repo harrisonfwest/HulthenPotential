@@ -76,6 +76,7 @@ def uncertainties(width, size, orb, delt, allowed_level):
     print('Uncertainty = ' + str(delta_r * delta_p))
     return
 
+# Get ∆r∆p value for 2p, 3p, 4p, and 5p orbitals (delta = 0.025)
 uncertainties(999, 100, 1, 0.025, 1)
 uncertainties(999, 100, 1, 0.025, 2)
 uncertainties(999, 100, 1, 0.025, 3)
