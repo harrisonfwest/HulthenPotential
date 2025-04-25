@@ -2,6 +2,8 @@ import numpy as np
 from numpy.linalg import eig
 import matplotlib.pyplot as plt
 
+
+hbar = 1.0545e-34
 N_nodes = 50
 max_radius = 150
 
@@ -53,26 +55,31 @@ def first_derivative(wavefunction, h):
         res[i] = (wavefunction[i+1] - wavefunction[i-1])/(2 * h)
     return res
 
-arr = hulthen_array(999, 50, 1, 0.025)
-e, w = eig(arr)
-order = np.argsort(e)
-h_ex = 100/999
-# for 3p:
-wave = normalize(wavefunction = w[:,order[1]], h = h_ex)
-r_range = np.linspace(0, 100, 999)
-expectation_r_square = trapezoid_integral(wave**2 * r_range**2, h_ex)
-expectation_r = trapezoid_integral(wave**2 * r_range, h_ex)
-delta_r = np.sqrt(expectation_r_square - expectation_r**2)
-hbar = 1.0545e-34
-wave_dr = first_derivative(wave, h_ex)
-wave_ddr = first_derivative(wave_dr, h_ex)
-expectation_p_square = trapezoid_integral(wave_ddr**2 * (hbar**2), h_ex)
-expectation_p = trapezoid_integral(hbar * wave_dr**2, h_ex)
-# make product of expectation_p with itself negative bc -i term in front of both
-delta_p = np.sqrt(expectation_p_square - expectation_p**2)
-print('Delta r = ' + str(delta_r))
-print('Delta p = ' + str(delta_p))
-print('Uncertainty = ' + str(delta_r * delta_p))
+def uncertainties(width, size, orb, delt, allowed_level):
+    arr = hulthen_array(999, 50, orbital = orb, delta = delt)
+    e, w = eig(arr)
+    order = np.argsort(e)
+    h_ex = size/width
+    wave = normalize(wavefunction = w[:,order[allowed_level-1]], h = h_ex)
+    r_range = np.linspace(0, size, width)
+    expectation_r_square = trapezoid_integral(wave**2 * r_range**2, h_ex)
+    expectation_r = trapezoid_integral(wave**2 * r_range, h_ex)
+    delta_r = np.sqrt(expectation_r_square - expectation_r**2)
+
+    wave_dr = first_derivative(wave, h_ex)
+    wave_ddr = first_derivative(wave_dr, h_ex)
+    expectation_p_square = trapezoid_integral(wave_ddr**2 * (hbar**2), h_ex)
+    expectation_p = trapezoid_integral(hbar * wave_dr**2, h_ex)
+    delta_p = np.sqrt(expectation_p_square + expectation_p**2)
+    print('Delta r = ' + str(delta_r))
+    print('Delta p = ' + str(delta_p))
+    print('Uncertainty = ' + str(delta_r * delta_p))
+    return
+
+uncertainties(999, 100, 1, 0.025, 1)
+uncertainties(999, 100, 1, 0.025, 2)
+uncertainties(999, 100, 1, 0.025, 3)
+uncertainties(999, 100, 1, 0.025, 4)
 
 ### Plot 3p orbital probability density approximations (normalized) for various screening parameters
 ### and their corresponding energies
