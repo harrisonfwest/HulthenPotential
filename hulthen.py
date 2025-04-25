@@ -42,37 +42,39 @@ def trapezoid_integral(wavefunction, h):
 def normalize(wavefunction, h):
     return np.array(wavefunction) / np.sqrt(trapezoid_integral(wavefunction ** 2, h))
 
-arr1 = hulthen_array(999, 50, 1, 0.025)
-e1, w1 = eig(arr1)
-order1 = np.argsort(e1)
-wave1 = normalize(wavefunction = w1[:,order1[1]], h = 100/999)
-
-arr2 = hulthen_array(999, 50, 1, 0.05)
-e2, w2 = eig(arr2)
-order2 = np.argsort(e2)
-wave2 = normalize(w2[:,order2[1]], 100/999)
-
-arr3 = hulthen_array(999, 50, 1, 0.075)
-e3, w3 = eig(arr3)
-order3 = np.argsort(e3)
-wave3 = normalize(w3[:,order3[1]], 50/999)
-
-arr4 = hulthen_array(999, 50, 1, 0.1)
-e4, w4 = eig(arr4)
-order4 = np.argsort(e4)
-wave4 = normalize(w4[:,order4[1]], 50/999)
-
-arr5 = hulthen_array(999, 50, 1, 0.125)
-e5, w5 = eig(arr5)
-order5 = np.argsort(e5)
-wave5 = normalize(w5[:,order5[1]], 50/999)
-
-arr6 = hulthen_array(999, 50, 1, 0.15)
-e6, w6 = eig(arr6)
-order6 = np.argsort(e6)
-wave6 = normalize(w6[:,order6[1]], 50/999)
-
 # ### Plot 3p orbital probability density approximations (normalized) for various screening parameters
+# ### and their corresponding energies
+
+# arr1 = hulthen_array(999, 50, 1, 0.025)
+# e1, w1 = eig(arr1)
+# order1 = np.argsort(e1)
+# wave1 = normalize(wavefunction = w1[:,order1[1]], h = 100/999)
+#
+# arr2 = hulthen_array(999, 50, 1, 0.05)
+# e2, w2 = eig(arr2)
+# order2 = np.argsort(e2)
+# wave2 = normalize(w2[:,order2[1]], 100/999)
+#
+# arr3 = hulthen_array(999, 50, 1, 0.075)
+# e3, w3 = eig(arr3)
+# order3 = np.argsort(e3)
+# wave3 = normalize(w3[:,order3[1]], 50/999)
+#
+# arr4 = hulthen_array(999, 50, 1, 0.1)
+# e4, w4 = eig(arr4)
+# order4 = np.argsort(e4)
+# wave4 = normalize(w4[:,order4[1]], 50/999)
+#
+# arr5 = hulthen_array(999, 50, 1, 0.125)
+# e5, w5 = eig(arr5)
+# order5 = np.argsort(e5)
+# wave5 = normalize(w5[:,order5[1]], 50/999)
+#
+# arr6 = hulthen_array(999, 50, 1, 0.15)
+# e6, w6 = eig(arr6)
+# order6 = np.argsort(e6)
+# wave6 = normalize(w6[:,order6[1]], 50/999)
+
 # plt.plot(wave1**2, color = 'C0', label = '$\delta$ = 0.025', alpha = 0.9)
 # plt.plot(wave2**2, color = 'C1',label = '$\delta$ = 0.050', alpha = 0.9, linestyle = '--')
 # plt.plot(wave3**2, color = 'C2',label = '$\delta$ = 0.075', alpha = 0.9, linestyle = 'dotted')
@@ -86,7 +88,6 @@ wave6 = normalize(w6[:,order6[1]], 50/999)
 # plt.legend(fontsize = 11)
 # plt.show()
 #
-# ### and their corresponding energies
 # plt.axhline(e6[order6[1]], color = 'C5', label = '$\delta$ = 0.150, E = %.5f' % e6[order6][1], linestyle = (0, (3,1,1,1)))
 # plt.axhline(e5[order5[1]], color = 'C4', label = '$\delta$ = 0.125, E = %.5f' % e5[order5][1], linestyle = (0, (1,1)))
 # plt.axhline(e4[order4[1]], color = 'C3', label = '$\delta$ = 0.100, E = %.5f' % e4[order4][1], linestyle = 'dashdot')
