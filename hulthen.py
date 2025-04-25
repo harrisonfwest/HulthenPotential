@@ -31,42 +31,20 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
     A = offDiagA + diagA
     return A
 
-arr = hulthen_array(width = 999, size = 100, orbital = 1, delta = 0.025)
-e, w = eig(arr)
-ordered_e = np.argsort(e)
-
-# for i in ordered_e[:6]:
-#     plt.plot(w[:,i]**2)
-#     plt.title('E = ' + str(e[i]) + ' (l = 1)' + ', spot ' + str(i))
-#     plt.show()
-
-def simpson_integral(wavefunction, h):
-    length = int(len(wavefunction)-1)
-    half_length = int(length / 2)
-
-    t1 = h/3
-
-    t2 = wavefunction[0] + wavefunction[-1]
-
+def trapezoid_integral(wavefunction, h):
+    t1 = h
+    t2 = (wavefunction[0] + wavefunction[-1])/2
     t3 = 0
-    for i in range(1, half_length+1):
-        t3 += wavefunction[(2 * i) - 1] + 2
-    t3 *= 4
+    for i in range(1, len(wavefunction)):
+        t3 += wavefunction[i]
+    return t1 * (t2 + t3)
 
-    t4 = 0
-    for i in range(1, half_length):
-        t4 += wavefunction[2 * i]
-    t4 *= 2
+def normalize(wavefunction, h):
+    wave2 = wavefunction.copy()
+    norm = 1 / np.sqrt(trapezoid_integral(wavefunction ** 2, 100 / 999))
+    for i in range(len(wave2)):
+        wave2[i] *= norm
+    return wave2
 
-    return t1 * (t2 + t3 + t4)
-
-wavefunction = w[:,866]
-plt.plot(wavefunction)
-plt.show()
-
-wave2 = wavefunction.copy()
-norm = simpson_integral(wavefunction**2, 100/999)
-for i in range(len(wave2)):
-    wave2[i] /= np.sqrt(norm)
-plt.plot(wave2**2)
-plt.show()
+def energyVersusDelta(width, size, orbital, delRange):
+    energies = []
