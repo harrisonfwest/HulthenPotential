@@ -41,20 +41,20 @@ ordered_e = np.argsort(e)
 #     plt.show()
 
 def simpson_integral(wavefunction, h):
-    length = int(len(wavefunction))
+    length = int(len(wavefunction)-1)
     half_length = int(length / 2)
 
-    t1 = (1/3) * h
+    t1 = h/3
 
     t2 = wavefunction[0] + wavefunction[-1]
 
     t3 = 0
-    for i in range(1, half_length):
-        t3 += wavefunction[2*i - 1] + 2
+    for i in range(1, half_length+1):
+        t3 += wavefunction[(2 * i) - 1] + 2
     t3 *= 4
 
     t4 = 0
-    for i in range(1, half_length - 1):
+    for i in range(1, half_length):
         t4 += wavefunction[2 * i]
     t4 *= 2
 
@@ -63,10 +63,10 @@ def simpson_integral(wavefunction, h):
 wavefunction = w[:,866]
 plt.plot(wavefunction)
 plt.show()
+
+wave2 = wavefunction.copy()
 norm = simpson_integral(wavefunction**2, 100/999)
-# print(norm)
-wave2 = wavefunction**2
 for i in range(len(wave2)):
-    wave2[i] /= norm
-plt.plot(wave2)
+    wave2[i] /= np.sqrt(norm)
+plt.plot(wave2**2)
 plt.show()
