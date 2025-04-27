@@ -2,28 +2,28 @@ import numpy as np
 from numpy.linalg import eig
 import matplotlib.pyplot as plt
 
+def hulthen_discrete(r: int, delta: float, currH: float) -> float:
+    '''
+    :param r: index of which node in the discrete function is being considered
+    :param delta: screening parameter
+    :param currH: spacing between nodes of discrete function
+    :return: approximation of Hulthen potential at the given radius with the given screening strength
+    '''
+    t = -(delta * np.exp(-delta * r * currH))/(1- np.exp(-delta * r * currH))
+    return t
 
-hbar = 1.0545e-34
-N_nodes = 50
-max_radius = 150
+def hulthen_array(width: int, size: float, orbital: int, delta: float) -> np.ndarray:
+    '''
 
-def hulthen_discrete(r, delta, orbital, currH):
-    t1 = -(delta * np.exp(-delta * r * currH))/(1- np.exp(-delta * r * currH))
-    t2 = (orbital * (orbital + 1))/2
-    t3 = delta / (1 - np.exp(-delta * r * currH))
-    t4 = np.exp(-delta * r * currH)
-    return t1 #+ (t2*(t3**2)*t4) # omitting extra terms, using pure Hulthen potential
-
-# ## Plot of Hulthen Potential: ###
-# plt.plot(np.linspace(1, 200, 10000), \
-#          hulthen_discrete(np.linspace(1, 200, 10000), 0.025, 1, currH = 1))
-# plt.xscale('log')
-# plt.title('Hulthén potential')
-# plt.xlabel('r')
-# plt.ylabel('V(r)')
-# plt.show()
-
-def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025):
+    :param width: number of nodes used to approximate the wavefunction; also the dimensions of the
+    2D square array returned
+    :param size: size of the system, in atomic units, out to which the wavefunction is approximated
+    :param orbital: orbital quantum number
+    :param delta: screening parameter
+    :return: 2D square Hamiltonian matrix representing the system;
+    Eigenevalues-eigenvector pairs represent energy-wavefunction pairs;
+    Physically allowed states are those with E<0
+    '''
     h = size / width
     offDiags = np.full(shape = width - 1, fill_value = -1/(2 * h**2)) # off-diagonal entries
     offDiagA = np.diag(offDiags, 1) + np.diag(offDiags, -1)
@@ -36,7 +36,13 @@ def hulthen_array(width = N_nodes, size = max_radius, orbital = 1, delta = 0.025
     A = offDiagA + diagA
     return A
 
-def trapezoid_integral(wavefunction, h):
+def trapezoid_integral(wavefunction: np.ndarray, h: float) -> float:
+    '''
+
+    :param wavefunction: Any 1D array representing a discrete function
+    :param h: spacing between nodes of discrete function
+    :return: Approximation of integral over the given discrete function, using the composite trapezoid rule
+    '''
     t1 = h
     t2 = (wavefunction[0] + wavefunction[-1])/2
     t3 = 0
@@ -44,54 +50,89 @@ def trapezoid_integral(wavefunction, h):
         t3 += wavefunction[i]
     return t1 * (t2 + t3)
 
-def normalize(wavefunction, h):
+def normalize(wavefunction: np.ndarray, h: float) -> np.ndarray:
+    '''
+    :param wavefunction: Discrete function
+    :param h: spacing between nodes of discrete function
+    :return: factor which, when multiplied by each term in the discrete function, results in
+    the square of that function having an enclosed area of 1. Useful for normalizing a discrete wavefunction approximation
+    to create a valid probability density function
+    '''
+
     return np.array(wavefunction) / np.sqrt(trapezoid_integral(wavefunction ** 2, h))
 
-### ∆r, ∆p, and ∆r∆p; and see how ∆r∆p varies as E increases
-# ∆r = Sqrt(<r^2> - <r>^2)
-# <r> = int[psi*(r) r psi(r) dr]
-# consider the p orbital with low screening (delta = 0.025)
+def first_derivative(wavefunction: np.ndarray, h: float) -> np.ndarray:
+    '''
 
-def first_derivative(wavefunction, h):
+    :param wavefunction: vector representation of a discrete function as collection of points
+    :param h: spacing between each node
+    :return: discrete function which approximates the first derivative of 'wavefunction' parameter
+    '''
+
     res = np.zeros_like(wavefunction)
     for i in range(1, len(wavefunction)-1):
         res[i] = (wavefunction[i+1] - wavefunction[i-1])/(2 * h)
+
     return res
 
-def uncertainties(width, size, orb, delt, allowed_level) -> None:
+def uncertainties(width: int, size: float, orb: int, delt: float, allowed_level: int) -> None:
+    '''
+    Function which adopts the architecture of the previous functions to calculate the uncertainty of the radius, and momentum,
+    and the product of those two values. In atomic units, Heisenberg's uncertainty principle states that this product
+    should always be greater than or equal to 0.5
+
+    :param width: number of nodes used to approximate the wavefunction
+    :param size: size of the system, in atomic units, out to which the wavefunction is approximated
+    :param orb: orbital quantum number
+    :param delt: Screening parameter
+    :param allowed_level: Energy level of system to consider. Note that this is not necessarily the same as the principal
+    quantum number; For example, there is no 1p orbital. Therefore, setting this value to 1 with an 'orb' value of 1
+    will solve for the 2p orbital, since n = 2 is the lowest allowed energy level for the given orbital quantum number.
+    :return: Prints the uncertainties for radius and momentum, and their product
+    '''
     arr = hulthen_array(999, 50, orbital = orb, delta = delt)
     e, w = eig(arr)
     order = np.argsort(e)
     h_ex = size/width
     wave = normalize(wavefunction = w[:,order[allowed_level-1]], h = h_ex)
-    r_range = np.linspace(0, size, width)
+    r_range = np.linspace(wave[0], size, width)
     expectation_r = trapezoid_integral(wave**2 * r_range, h_ex)
     expectation_r_square = trapezoid_integral(wave**2 * r_range**2, h_ex)
     delta_r = np.sqrt(expectation_r_square - expectation_r**2)
 
-    wave_dr = first_derivative(wave, h_ex)
-    wave_ddr = first_derivative(wave_dr, h_ex)
-    expectation_p_quantSquared = - hbar**2 * (trapezoid_integral(wave * wave_dr, h_ex))**2
-    expectation_p_square = - hbar**2 * trapezoid_integral(wave * wave_ddr, h_ex)
-    delta_p = np.sqrt(expectation_p_square - expectation_p_quantSquared)
+    inner_derivative = first_derivative(wave/r_range, h_ex)
+    expectation_p = trapezoid_integral(wave * r_range * inner_derivative, h_ex) # take the negative of this value's square
+    expectation_p_square = - trapezoid_integral(wave/r_range * first_derivative(r_range**2 * inner_derivative, h_ex), h_ex)
+    delta_p = np.sqrt(expectation_p_square + (expectation_p**2)) # flipped sign because expectation_p actually has a factor of i
     print('Delta r = ' + str(delta_r))
     print('Delta p = ' + str(delta_p))
     print('Uncertainty = ' + str(delta_r * delta_p))
     return
 
+### Number of allowed energy levels as a function of screening parameter
 # delta_range = np.linspace(0.025, 0.5, 40)
 # num_levels = []
 # for delt in delta_range:
 #     curr_delt_levels = 0
-#     for orb in range(1, 6):
+#     for orb in range(1, 5):
 #         arr = hulthen_array(999, 100, orbital = orb, delta = delt)
 #         e, w = eig(arr)
 #         allowed = [en for en in e if en < 0]
+#         print(allowed)
 #         curr_delt_levels += len(allowed)
 #     num_levels.append(curr_delt_levels)
 # plt.plot(delta_range, num_levels)
 # plt.xlabel('Screening parameter $\delta$')
 # plt.ylabel('Number of allowed energy levels found')
+# plt.yticks(np.arange(0, 19), np.arange(0, 19))
+# plt.axhline(0, color = 'grey', linestyle = '--')
+# plt.axhline(1, color = 'grey', linestyle = '--')
+# plt.axhline(2, color = 'grey', linestyle = '--')
+# plt.axhline(3, color = 'grey', linestyle = '--')
+# plt.axhline(4, color = 'grey', linestyle = '--')
+# plt.axhline(6, color = 'grey', linestyle = '--')
+# plt.axhline(10, color = 'grey', linestyle = '--')
+# plt.axhline(18, color = 'grey', linestyle = '--')
 # plt.show()
 
 ### What is the value of nodes at which values for energy converge? We will try varying node counts on
