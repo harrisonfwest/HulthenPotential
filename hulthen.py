@@ -2,19 +2,19 @@ import numpy as np
 from numpy.linalg import eig
 import matplotlib.pyplot as plt
 
-def hulthen_discrete(r: int, delta: float, currH: float) -> float:
+def hulthen_discrete(r: int, delta: float, currH: float, orb: int) -> float:
     '''
     :param r: index of which node in the discrete function is being considered
     :param delta: screening parameter
     :param currH: spacing between nodes of discrete function
     :return: approximation of Hulthen potential at the given radius with the given screening strength
     '''
-    t = -(delta * np.exp(-delta * r * currH))/(1- np.exp(-delta * r * currH))
-    return t
+    t1 = -delta * np.exp(- delta * (r * currH))/(1 - np.exp(- delta * (r * currH)))
+    t2 = (orb * (orb + 1))/(2 * (r * currH)**2)
+    return t1 + t2
 
 def hulthen_array(width: int, size: float, orbital: int, delta: float) -> np.ndarray:
     '''
-
     :param width: number of nodes used to approximate the wavefunction; also the dimensions of the
     2D square array returned
     :param size: size of the system, in atomic units, out to which the wavefunction is approximated
@@ -31,7 +31,7 @@ def hulthen_array(width: int, size: float, orbital: int, delta: float) -> np.nda
     diags = np.zeros(width)
     for i in range(len(diags)):
         true_index = i + 1
-        diags[i] = (1/(h**2)) + (orbital * (orbital + 1))/(2 * (true_index * h)**2) + hulthen_discrete(true_index, delta, orbital, h)
+        diags[i] = (1/(h**2)) + (orbital * (orbital + 1))/(2 * (true_index * h)**2) + hulthen_discrete(true_index, delta, h, orb = orbital)
     diagA = np.diag(diags)
     A = offDiagA + diagA
     return A
@@ -178,7 +178,18 @@ def uncertainties(width: int, size: float, orb: int, delt: float, allowed_level:
 # arr1 = hulthen_array(999, 50, 1, 0.025)
 # e1, w1 = eig(arr1)
 # order1 = np.argsort(e1)
-# wave1 = normalize(wavefunction = w1[:,order1[1]], h = 100/999)
+# wave1 = normalize(wavefunction = w1[:,order1[0]], h = 100/999)
+# plt.plot(wave1**2, label = '2p orbital')
+# wave1_2 = normalize(wavefunction = w1[:,order1[1]], h = 100/999)
+# plt.plot(wave1_2**2, label = '3p orbital')
+# wave1_3 = normalize(wavefunction = w1[:,order1[2]], h = 100/999)
+# plt.plot(wave1_3**2, label = '4p orbital')
+# plt.title('Lowest three $\ell = 1$ energy level probability distributions')
+# plt.xticks([0, 200, 400, 600, 800, 1000], [str(0), str(200*50/999)[:2], str(400*50/999)[:2], str(600*50/999)[:2], str(800*50/999)[:2], str(1000*50/999)[:2]])
+# plt.xlabel('Radius (a.u.)')
+# plt.ylabel('Probability')
+# plt.legend()
+# plt.show()
 #
 # arr2 = hulthen_array(999, 50, 1, 0.05)
 # e2, w2 = eig(arr2)
