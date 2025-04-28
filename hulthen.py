@@ -10,8 +10,7 @@ def hulthen_discrete(r: int, delta: float, currH: float, orb: int) -> float:
     :return: approximation of Hulthen potential at the given radius with the given screening strength
     '''
     t1 = -delta * np.exp(- delta * (r * currH))/(1 - np.exp(- delta * (r * currH)))
-    t2 = (orb * (orb + 1))/(2 * (r * currH)**2)
-    return t1 + t2
+    return t1
 
 def hulthen_array(width: int, size: float, orbital: int, delta: float) -> np.ndarray:
     '''
