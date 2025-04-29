@@ -10,7 +10,7 @@ def hulthen_discrete(r: int, delta: float, currH: float, orb: int) -> float:
     :return: approximation of Hulthen potential at the given radius with the given screening strength
     '''
     t1 = -delta * np.exp(- delta * (r * currH))/(1 - np.exp(- delta * (r * currH)))
-    return t1
+    return t1 #+ (orb * (orb + 1)/(2 * (r * currH)**2))
 
 def hulthen_array(width: int, size: float, orbital: int, delta: float) -> np.ndarray:
     '''
@@ -174,18 +174,17 @@ def uncertainties(width: int, size: float, orb: int, delt: float, allowed_level:
 ### Plot 3p orbital probability density approximations (normalized) for various screening parameters
 ### and their corresponding energies
 
-# arr1 = hulthen_array(999, 50, 1, 0.025)
+# arr1 = hulthen_array(999, 80, 1, 0.025)
 # e1, w1 = eig(arr1)
 # order1 = np.argsort(e1)
-# wave1 = normalize(wavefunction = w1[:,order1[0]], h = 100/999)
+# wave1 = normalize(wavefunction = w1[:,order1[0]], h = 80/999)
 # plt.plot(wave1**2, label = '2p orbital')
-# wave1_2 = normalize(wavefunction = w1[:,order1[1]], h = 100/999)
+# wave1_2 = normalize(wavefunction = w1[:,order1[1]], h = 80/999)
 # plt.plot(wave1_2**2, label = '3p orbital')
-# wave1_3 = normalize(wavefunction = w1[:,order1[2]], h = 100/999)
+# wave1_3 = normalize(wavefunction = w1[:,order1[2]], h = 80/999)
 # plt.plot(wave1_3**2, label = '4p orbital')
-# plt.title('Lowest three $\ell = 1$ energy level probability distributions')
-# plt.xticks([0, 200, 400, 600, 800, 1000], [str(0), str(200*50/999)[:2], str(400*50/999)[:2], str(600*50/999)[:2], str(800*50/999)[:2], str(1000*50/999)[:2]])
-# plt.xlabel('Radius (a.u.)')
+# plt.title('Lowest three $\ell = 1$ energy level probability distributions up to 100 a.u.')
+# plt.xlabel('Radial node')
 # plt.ylabel('Probability')
 # plt.legend()
 # plt.show()
